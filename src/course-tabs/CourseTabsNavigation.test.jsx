@@ -1,9 +1,15 @@
 import React from 'react';
 import { initializeMockApp, render, screen } from '../setupTest';
 import { CourseTabsNavigation } from './index';
+import { useModel } from '../generic/model-store';
+
+jest.mock('../generic/model-store', () => ({
+  useModel: jest.fn(),
+}));
 
 describe('Course Tabs Navigation', () => {
   beforeAll(async () => {
+    useModel.mockReturnValue({ enabled: false });
     initializeMockApp();
   });
 
@@ -28,5 +34,18 @@ describe('Course Tabs Navigation', () => {
 
     expect(screen.getByRole('link', { name: tabs[1].title })).toHaveAttribute('href', tabs[1].url);
     expect(screen.getByRole('link', { name: tabs[1].title })).not.toHaveClass('active');
+  });
+
+  it('does not render the CoursewareSearch component by default', () => {
+    render(<CourseTabsNavigation tabs={[]} />);
+
+    expect(screen.queryByTestId('courseware-search')).not.toBeInTheDocument();
+  });
+
+  it('renders the CoursewareSearch component if the waffle flag is enabled', () => {
+    useModel.mockReturnValue({ enabled: true });
+    render(<CourseTabsNavigation tabs={[]} />);
+
+    expect(screen.getByTestId('courseware-search')).toBeInTheDocument();
   });
 });

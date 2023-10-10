@@ -88,6 +88,12 @@ Object {
         },
       },
     },
+    "coursewareSearch": Object {
+      "course-v1:edX+DemoX+Demo_Course": Object {
+        "enabled": false,
+        "id": "course-v1:edX+DemoX+Demo_Course",
+      },
+    },
     "dates": Object {
       "course-v1:edX+DemoX+Demo_Course": Object {
         "courseDateBlocks": Array [
@@ -409,6 +415,12 @@ Object {
         },
       },
     },
+    "coursewareSearch": Object {
+      "course-v1:edX+DemoX+Demo_Course": Object {
+        "enabled": true,
+        "id": "course-v1:edX+DemoX+Demo_Course",
+      },
+    },
     "outline": Object {
       "course-v1:edX+DemoX+Demo_Course": Object {
         "accessExpiration": null,
@@ -606,6 +618,12 @@ Object {
           "sku": "8CF08E5",
           "upgradeUrl": "http://localhost:18130/basket/add/?sku=8CF08E5",
         },
+      },
+    },
+    "coursewareSearch": Object {
+      "course-v1:edX+DemoX+Demo_Course": Object {
+        "enabled": true,
+        "id": "course-v1:edX+DemoX+Demo_Course",
       },
     },
     "progress": Object {

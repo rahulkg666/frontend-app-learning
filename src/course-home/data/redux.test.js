@@ -20,6 +20,7 @@ describe('Data layer integration tests', () => {
   const { id: courseId } = courseHomeMetadata;
   let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
+  const courseSearchEnabledUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
 
   const courseHomeAccessDeniedMetadata = Factory.build(
     'courseHomeMetadata',
@@ -48,6 +49,7 @@ describe('Data layer integration tests', () => {
     it('Should fail to fetch if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
       axiosMock.onGet(`${datesBaseUrl}/${courseId}`).networkError();
+      axiosMock.onGet(courseSearchEnabledUrl).networkError();
 
       await executeThunk(thunks.fetchDatesTab(courseId), store.dispatch);
 
@@ -62,6 +64,7 @@ describe('Data layer integration tests', () => {
 
       axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
       axiosMock.onGet(datesUrl).reply(200, datesTabData);
+      axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: false });
 
       await executeThunk(thunks.fetchDatesTab(courseId), store.dispatch);
 
@@ -82,6 +85,7 @@ describe('Data layer integration tests', () => {
       async (errorStatus) => {
         axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeAccessDeniedMetadata);
         axiosMock.onGet(`${datesBaseUrl}/${courseId}`).reply(errorStatus, {});
+        axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: false });
 
         await executeThunk(thunks.fetchDatesTab(courseId), store.dispatch);
 
@@ -101,6 +105,7 @@ describe('Data layer integration tests', () => {
     it('Should result in fetch failure if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
       axiosMock.onGet(outlineUrl).networkError();
+      axiosMock.onGet(courseSearchEnabledUrl).networkError();
 
       await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
 
@@ -113,6 +118,7 @@ describe('Data layer integration tests', () => {
 
       axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
       axiosMock.onGet(outlineUrl).reply(200, outlineTabData);
+      axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: true });
 
       await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
 
@@ -133,6 +139,7 @@ describe('Data layer integration tests', () => {
       async (errorStatus) => {
         axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeAccessDeniedMetadata);
         axiosMock.onGet(outlineUrl).reply(errorStatus, {});
+        axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: false });
 
         await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
 
@@ -151,6 +158,7 @@ describe('Data layer integration tests', () => {
     it('Should result in fetch failure if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
       axiosMock.onGet(`${progressBaseUrl}/${courseId}`).networkError();
+      axiosMock.onGet(courseSearchEnabledUrl).networkError();
 
       await executeThunk(thunks.fetchProgressTab(courseId), store.dispatch);
 
@@ -165,6 +173,7 @@ describe('Data layer integration tests', () => {
 
       axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
       axiosMock.onGet(progressUrl).reply(200, progressTabData);
+      axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: true });
 
       await executeThunk(thunks.fetchProgressTab(courseId), store.dispatch);
 
@@ -187,6 +196,7 @@ describe('Data layer integration tests', () => {
 
       axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
       axiosMock.onGet(progressUrl).reply(200, progressTabData);
+      axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: false });
 
       await executeThunk(thunks.fetchProgressTab(courseId, 2), store.dispatch);
 
@@ -200,6 +210,7 @@ describe('Data layer integration tests', () => {
         const progressUrl = `${progressBaseUrl}/${courseId}`;
         axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeAccessDeniedMetadata);
         axiosMock.onGet(progressUrl).reply(errorStatus, {});
+        axiosMock.onGet(courseSearchEnabledUrl).reply(200, { enabled: false });
 
         await executeThunk(thunks.fetchProgressTab(courseId), store.dispatch);
 

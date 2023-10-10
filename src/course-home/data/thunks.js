@@ -12,6 +12,7 @@ import {
   postDismissWelcomeMessage,
   postRequestCert,
   getLiveTabIframe,
+  getCoursewareSearchEnabledFlag,
 } from './api';
 
 import {
@@ -52,6 +53,16 @@ export function fetchTab(courseId, tab, getTabData, targetUserId) {
           },
         }));
       }
+
+      const { enabled } = await getCoursewareSearchEnabledFlag(courseId);
+      dispatch(addModel({
+        modelType: 'coursewareSearch',
+        model: {
+          id: courseId,
+          enabled,
+        },
+      }));
+
       // Disable the access-denied path for now - it caused a regression
       if (!courseHomeCourseMetadata.courseAccess.hasAccess) {
         dispatch(fetchTabDenied({ courseId }));
