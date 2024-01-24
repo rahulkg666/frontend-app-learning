@@ -16,3 +16,4 @@ config.plugins.push(
 );
 
 module.exports = config;
+alert("aaa");
